@@ -1,0 +1,72 @@
+{
+  "name": "lurelle-core-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/lurelle-core-server/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/lurelle-core-server",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/lurelle-core-server/src/main.ts",
+        "tsConfig": "apps/lurelle-core-server/tsconfig.app.json",
+        "assets": ["apps/lurelle-core-server/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "generateLockfile": true,
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "lurelle-core-server:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "lurelle-core-server:build:development"
+        },
+        "production": {
+          "buildTarget": "lurelle-core-server:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/lurelle-core-server/jest.config.ts"
+      }
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/lurelle-core-server/Dockerfile . -t lurelle-core-server"
+    }
+  },
+  "tags": []
+}
