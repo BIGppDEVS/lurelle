@@ -1,0 +1,26 @@
+{
+  "name": "lurelle-web-client-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/lurelle-web-client-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/lurelle-web-client-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "lurelle-web-client:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "lurelle-web-client:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["lurelle-web-client"]
+}
